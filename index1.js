@@ -1,8 +1,14 @@
+const fs = require('fs')
 const server = Bun.serve({
     port:8050,
     fetch(req){
-       const url = new URL(req.url);
-
+       const url = new URL(req.url)
+       const logMessage = `[${new Date().toISOString()}] ${req.method} ${url.pathname}\n`;
+       fs.appendFile('log.txt', logMessage, (err) => {
+           if (err) {
+               console.error('Failed to write to log file:', err);
+           }
+       });
        switch (url.pathname) {
         case "/":
             return new Response('Welcome to the BarterX');
@@ -60,12 +66,9 @@ const server = Bun.serve({
                 headers: { "Content-Type": "application/json" },
             });
             }    
-
         default:
             return new Response("Page not found", { status: 404 })
     }
-
     }
 })
-
 console.log(`Listening on http://localhost:${server.port}`)
