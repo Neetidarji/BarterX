@@ -38,11 +38,31 @@ const server = Bun.serve({
             return new Response("Contact us here");
             
         case "/about":
-           return new Response(Bun.file("./public1/about1.html"))   
-            
+            return new Response(Bun.file("./public1/about1.html"), {
+                headers: { "Content-Type": "text/html" },
+            });
+
+        case "/style1.css":
+            return new Response(Bun.file("./public1/style1.css"), {
+                headers: { "Content-Type": "text/css" },
+            });
+
+        case "/logo1.png":
+            return new Response(Bun.file("./public1/logo1.png"), {
+                headers: { "Content-Type": "image/png" },
+            });
+        case "/api/products": {
+            const products = [
+                { id: 1, name: "Used Laptop", price: 300 },
+                { id: 2, name: "Second-hand Bicycle", price: 50 },
+            ];
+            return new Response(JSON.stringify(products), {
+                headers: { "Content-Type": "application/json" },
+            });
+            }    
+
         default:
-            return new Response("Page not found");
-            break;
+            return new Response("Page not found", { status: 404 })
     }
 
     }
